@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 
 get_filename_component(dir_name ${CMAKE_CURRENT_LIST_DIR} NAME)
 
-file(GLOB lib_source "*.cpp" "*.h*")
+file(GLOB lib_source "*.cpp" "*.h*" "*.csv")
 LIST(SORT lib_source)
 
 message(STATUS "Configuring library: ${dir_name}")
