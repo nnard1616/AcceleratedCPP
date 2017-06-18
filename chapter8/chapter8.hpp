@@ -1,10 +1,5 @@
 #ifndef CHAPTER8_HPP
 #define CHAPTER8_HPP
-#include <map>
-#include <iostream>
-#include <istream>
-#include <fstream>
-#include <iterator>
 #include "../comper/comper.hpp"
 
 using std::map;

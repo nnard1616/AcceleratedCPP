@@ -9,11 +9,12 @@ include_directories(${CMAKE_BINARY_DIR})
 add_definitions("-Wall -Wextra")
 
 add_subdirectory(chapter8)
+add_subdirectory(chapter10)
 add_subdirectory(comper)
 file(GLOB apps_source "apps/*.cpp")
 list(SORT apps_source)
 
-set(exec_dependencies chapter8 comper)
+set(exec_dependencies chapter8 comper chapter10)
 
 message(STATUS "\n   Applications: ")
 foreach(app_src_file ${apps_source})

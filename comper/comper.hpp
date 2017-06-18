@@ -3,9 +3,16 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <map>
+#include <iostream>
+#include <istream>
+#include <fstream>
+#include <iterator>
 
 using std::vector;
 using std::string;
+using std::cout;
+using std::endl;
 
 namespace comper  // COMmon PERsonal functions
 {

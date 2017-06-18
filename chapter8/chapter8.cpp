@@ -21,6 +21,7 @@ namespace chapter8
   {
     gen_aux(g, "<sentence>", os);
   }
+
   void gen_aux(const Grammar& g, string word, std::ostream_iterator<string> os)
   {
     try  // Key
@@ -33,8 +34,7 @@ namespace chapter8
     }
     catch (const std::out_of_range& oor)  // Not a Key
     {
-      *os = word;
-      os++;
+      *os++ = word;
     }
   }
   // Generate Sentence using vectors
