@@ -16,11 +16,17 @@ void p8_5()
   infile.close();
 }
 
-int main()
+void p10_5()
 {
   chapter10::string_list lis(std::cin);
-  cout << lis.size() << endl;
-  //  cout << lis.start->next_string()->contents() << endl;
-  lis.print_strings();
+  for (auto it = --(lis.end()); it != --(lis.begin()); it--)
+    cout << *it << endl;
+
+  cout << endl << lis[3] << endl;
+}
+
+int main()
+{
+  p10_5();
   return 0;
 }

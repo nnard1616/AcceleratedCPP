@@ -2,53 +2,106 @@
 
 namespace chapter10
 {
-  // string_container definitions
-  /*-------------------------------------------------------------------------------*/
-  string_container::string_container(string in)
+  namespace container
   {
-    s = in;
-    cnext = NULL;
-    cprev = NULL;
+    sc_iter::sc_iter(string_container* node)
+    {
+      current_node = node;  // current_node is a pointer to a string_container
+    }
+
+    string& sc_iter::operator*() const { return current_node->s; }
+    sc_iter& sc_iter::operator++()
+    {
+      current_node = current_node->cnext;
+      return *this;
+    }
+
+    sc_iter sc_iter::operator++(int)
+    {
+      sc_iter tmp = *this;
+      current_node = current_node->cnext;
+      return tmp;
+    }
+
+    sc_iter& sc_iter::operator--()
+    {
+      current_node = current_node->cprev;
+      return *this;
+    }
+
+    sc_iter sc_iter::operator--(int)
+    {
+      sc_iter tmp = *this;
+      current_node = current_node->cprev;
+      return tmp;
+    }
+
+    bool sc_iter::operator==(const sc_iter& rhs)
+    {
+      return this->current_node == rhs.current_node;
+    }
+    bool sc_iter::operator!=(const sc_iter& rhs)
+    {
+      return this->current_node != rhs.current_node;
+    }
   }
-  void string_container::next_string(string_container* next) { cnext = next; }
-  void string_container::prev_string(string_container* prev) { cprev = prev; }
-  string_container* string_container::next_string() { return cnext; }
-  string_container* string_container::prev_string() { return cprev; }
-  string string_container::contents() { return s; }
-  // string_list defintions
+
   /*-------------------------------------------------------------------------------*/
   string_list::string_list(std::istream& ins)
   {
     string s;
-    string_container* prev;
+    container::string_container* prev;
     length = 0;
     while (std::getline(ins, s, ' '))
     {
-      string_container* curr = new string_container(s);
-      if (length > 0)
+      container::string_container* curr = new container::string_container(s);
+      if (length > 0)  // list is already being made
       {
-        (*prev).next_string(curr);
-        (*curr).prev_string(prev);
-        end = curr;
+        prev->cnext = curr;
+        curr->cprev = prev;
+        last = curr;
       }
-      else
-        start = curr;
+      else  // just now starting to create the list
+        first = curr;
       prev = curr;
       ++length;
     }
+
+    // the following make a string_container with " " as contents, who is after
+    // last container, and before the first container, making string_list a
+    // circular list
+    container::string_container* curr = new container::string_container(" ");
+    prev->cnext = curr;
+    curr->cprev = prev;
+    curr->cnext = first;
+    first->cprev = curr;
   }
 
+  container::sc_iter string_list::begin() const
+  {
+    return container::sc_iter(first);
+  }
+
+  container::sc_iter string_list::end() const
+  {
+    return ++(container::sc_iter(last));
+  }
   unsigned int string_list::size() { return length; }
   void string_list::print_strings()
   {
-    for (string_container* scp = start; scp != NULL; scp = scp->next_string())
-      cout << scp->contents() << endl;
+    for (container::string_container* scp = first; scp != nullptr;
+         scp = scp->cnext)
+      cout << scp->s << endl;
   }
-  /*-------------------------------------------------------------------------------*/
-  ADD::ADD(int x, int y)
+
+  string& string_list::operator[](int x)
   {
-    gx = x;
-    gy = y;
+    container::sc_iter start = this->begin();
+    while (x > 0)
+    {
+      start++;
+      --x;
+    }
+    return *start;
   }
-  int ADD::getSum() { return gx + gy; }
 }

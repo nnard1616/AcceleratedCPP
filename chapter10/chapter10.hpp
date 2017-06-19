@@ -1,44 +1,63 @@
 #ifndef CHAPTER10_HPP
 #define CHAPTER10_HPP
 #include "../comper/comper.hpp"
+
+// chapter10 namespace, for client use
 namespace chapter10
 {
-  class string_container
+  namespace container  // container implementation namespace, not for client use
   {
-    string s;
-    string_container* cnext;
-    string_container* cprev;
+    struct string_container
+    {
+      string_container* cnext{nullptr};
+      string_container* cprev{nullptr};
+      string s{" "};  // since spaces are the delimiters for strings, will use
+                      // space as end of list identifier
+      string_container(string in) { s = in; }
+    };
 
-   public:
-    string_container(string in);
-    void next_string(string_container* next);
-    void prev_string(string_container* prev);
-    string_container* next_string();
-    string_container* prev_string();
-    string contents();
-  };
+    class sc_iter  // string container iterator
+    {
+      string_container* current_node{nullptr};
+
+     public:
+      // Default Constructible
+      sc_iter() = default;
+      explicit sc_iter(string_container* node);
+
+      // Dereferenceable
+      string& operator*() const;
+
+      // Pre- and post-incrementable
+      sc_iter& operator++();
+      sc_iter operator++(int);  // should this be a string_container???
+
+      // Pre- and post-decrementable
+      sc_iter& operator--();
+      sc_iter operator--(int);  // should this be a string_container???
+
+      // Equality / inequality
+      bool operator==(const sc_iter& rhs);
+      bool operator!=(const sc_iter& rhs);
+    };
+  }
 
   class string_list
   {
-    string_container* start;
-    string_container* end;
+    container::string_container* first;
+    container::string_container* last;
     unsigned int length;
 
    public:
+    container::sc_iter begin() const;
+    container::sc_iter end() const;
+
     string_list(std::istream& ins);
     unsigned int size();
     void print_strings();
-  };
 
-  /*-------------------------------------------------------------------------------*/
-  class ADD
-  {
-    int gx;
-    int gy;
-
-   public:
-    ADD(int x, int y);
-    int getSum();
+    string& operator[](int x);
   };
 }
+
 #endif  // CHAPTER10_HPP
